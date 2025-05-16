@@ -28,6 +28,20 @@ Driver Salary API.
 
 3. Check env variable on .env.example
 
+   ```bash
+   # OPTIONAL IF USING DOCKER COMPOSE FILE
+   POSTGRES_USER="postgres"
+   POSTGRES_PASSWORD="secret"
+   POSTGRES_DB="postgres"
+
+   # REQUIRED ENV FOR POOL (PG LIBRARY)
+   PGUSER="postgres"
+   PGPASSWORD="secret"
+   PGDATABASE="postgres"
+   PGHOST="localhost"
+   PGPORT="5432"
+   ```
+
 4. Start Migration:
 
    ```bash
