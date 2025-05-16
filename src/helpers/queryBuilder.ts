@@ -3,7 +3,7 @@ import { IQueryURL } from "../controllers/salary.controller";
 export function queryBuilder(
   queryUrl: IQueryURL,
   queryConfig: Array<string | number>
-): string {
+) {
   let totalQuery: number = 1;
   let baseQuery: string = `
     WITH attendance AS (
@@ -65,7 +65,7 @@ export function queryBuilder(
       FROM "drivers" d
       JOIN "shipment_salary" ss ON d.driver_code = ss.driver_code
       JOIN "attendance" a ON d.driver_code = a.driver_code
-      WHERE d.name != ''
+      WHERE ($1 * a.total_attendance + ss.total_confirmed + ss.total_paid + ss.total_pending) > 0
   `;
 
   if (queryUrl.driver_code) {
@@ -100,20 +100,22 @@ export function queryBuilder(
       ORDER BY d.driver_code
   `;
 
-  if (queryUrl.page_size) {
-    totalQuery++;
-    baseQuery += ` LIMIT $${totalQuery}`;
-    queryConfig.push(Number(queryUrl.page_size));
-  }
+  const configCount = [...queryConfig];
 
-  if (queryUrl.current && queryUrl.page_size) {
-    totalQuery++;
-    baseQuery += ` OFFSET $${totalQuery}`;
-    queryConfig.push(
-      Number(queryUrl.current) * Number(queryUrl.page_size) -
-        Number(queryUrl.page_size)
-    );
-  }
+  totalQuery++;
+  baseQuery += ` LIMIT $${totalQuery}`;
+  queryConfig.push(Number(queryUrl.page_size || 10));
 
-  return baseQuery;
+  totalQuery++;
+  baseQuery += ` OFFSET $${totalQuery}`;
+  queryConfig.push(
+    Number(queryUrl.current || 1) * Number(queryUrl.page_size || 10) -
+      Number(queryUrl.page_size || 10)
+  );
+
+  return {
+    query: baseQuery,
+    queryCount: baseQuery.replace(/LIMIT.+?OFFSET.+?$/, ""),
+    configCount,
+  };
 }

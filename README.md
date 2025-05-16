@@ -26,17 +26,39 @@ Driver Salary API.
    npm install
    ```
 
-3. Start Migration:
+3. Check env variable on .env.example
+
+4. Start Migration:
 
    ```bash
    npm run migrate
    ```
 
-4. Start Seeder:
+5. Start Seeder:
 
    ```bash
    npm run seeder
    ```
+
+## API
+
+   ```bash
+   GET /v1/salary/driver/list
+   ```
+
+## Filter Available
+| Query Request Key                             | Default Value | Description                                                                                                                                                                                                                                                 |
+| --------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| month                                         |               | filter based on the shipment_date month                                                                                                                                                                                                                     |
+| year                                          |               | filter based on the shipment_date year                                                                                                                                                                                                                      |
+| page_size                                     | 10            | total per page                                                                                                                                                                                                                                              |
+| current                                       | 1             | page number                                                                                                                                                                                                                                                 |
+| driver_code                                   |               | Get the specific payroll of a driver                                                                                                                                                                                                                        |
+| status                                        |               | Possible values : - **PENDING** : returns all drivers that have total_pending >0 - **CONFIRMED** : returns all drivers that have total_confirmed > 0 - **PAID** : returns all drivers that have total_paid >0 but total_confirmed = 0 and total_pending = 0 |
+| name                                          |               | filters driver name that contains this string
+
+<br>                                                                                                                                                                                                         | filters driver name that contains this string |               |
+| filters driver name that contains this string |               |
 
 ## Scripts
 
@@ -59,3 +81,4 @@ npm run build
 - [Express](https://expressjs.com/)
 - [Pg](https://node-postgres.com/)
 - [Csv-parser](https://csv.js.org/parse/)
+- [Express-validator](https://express-validator.github.io/)

@@ -13,7 +13,7 @@ export interface IQueryURL {
 }
 
 export async function getSalary(req: Request, res: Response) {
-  const { current, page_size } = req.query as unknown as IQueryURL;
+  const { current = 1, page_size = 10 } = req.query as unknown as IQueryURL;
   const queryConfig: Array<string | number> = [];
   try {
     const configData = await pool.query(`
@@ -21,18 +21,21 @@ export async function getSalary(req: Request, res: Response) {
       `);
     queryConfig.push(configData.rows[0].value);
 
-    const query: string = queryBuilder(
+    const { query, queryCount, configCount } = queryBuilder(
       req.query as unknown as IQueryURL,
       queryConfig
     );
 
-    const result = await pool.query(query, queryConfig);
+    const [count, result] = await Promise.all([
+      await pool.query(`SELECT COUNT(*) FROM (${queryCount})`, configCount),
+      await pool.query(query, queryConfig),
+    ]);
 
     res.status(200).send({
       data: result.rows,
-      total_row: result.rowCount,
-      current: current && page_size && Number(current),
-      page_size: page_size && Number(page_size),
+      total_row: Number(count.rows[0].count),
+      current: Number(current),
+      page_size: Number(page_size),
     });
   } catch (error) {
     res.status(400).send({ error });
