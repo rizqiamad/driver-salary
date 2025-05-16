@@ -57,9 +57,6 @@ Driver Salary API.
 | status                                        |               | Possible values : - **PENDING** : returns all drivers that have total_pending >0 - **CONFIRMED** : returns all drivers that have total_confirmed > 0 - **PAID** : returns all drivers that have total_paid >0 but total_confirmed = 0 and total_pending = 0 |
 | name                                          |               | filters driver name that contains this string
 
-<br>                                                                                                                                                                                                         | filters driver name that contains this string |               |
-| filters driver name that contains this string |               |
-
 ## Scripts
 
 - **`dev`**: Starts the application in development mode
