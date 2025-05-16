@@ -12,11 +12,8 @@ export interface IQueryURL {
   name: string;
 }
 
-export async function getSalary(
-  req: Request<{}, {}, {}, IQueryURL>,
-  res: Response
-) {
-  const { current, page_size } = req.query;
+export async function getSalary(req: Request, res: Response) {
+  const { current, page_size } = req.query as unknown as IQueryURL;
   const queryConfig: Array<string | number> = [];
   try {
     const configData = await pool.query(`
@@ -24,7 +21,10 @@ export async function getSalary(
       `);
     queryConfig.push(configData.rows[0].value);
 
-    const query: string = queryBuilder(req.query, queryConfig);
+    const query: string = queryBuilder(
+      req.query as unknown as IQueryURL,
+      queryConfig
+    );
 
     const result = await pool.query(query, queryConfig);
 
