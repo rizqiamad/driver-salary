@@ -42,13 +42,19 @@ Driver Salary API.
    PGPORT="5432"
    ```
 
-4. Start Migration:
+4. Start docker compose
+
+   ```bash
+   docker compose up
+   ```
+
+5. Start Migration:
 
    ```bash
    npm run migrate
    ```
 
-5. Start Seeder:
+6. Start Seeder:
 
    ```bash
    npm run seeder
